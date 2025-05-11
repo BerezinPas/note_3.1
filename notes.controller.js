@@ -37,15 +37,26 @@ async function printNotes() {
 
 async function removeNote(id) {
   const notes = await getNotes();
-  const filteredNotes = notes.filter((note) => note.id !== id);
 
-  await saveNotes(filteredNotes);
+  const filtered = notes.filter((note) => note.id !== id);
 
-  console.log(chalk.bgRed("Note has been removed!"));
+  await saveNotes(filtered);
+  console.log(chalk.red(`Note with id="${id}" has been removed.`));
 }
 
+async function setNote(noteData) {
+  const notes = await getNotes();
+
+  const newNotes = notes.map((note) =>
+    note.id !== noteData.id ? note : noteData
+  );
+
+  await saveNotes(newNotes);
+  console.log(chalk.blue(`Note with id="${noteData.id}" has been updated.`));
+}
 module.exports = {
   addNote,
-  printNotes,
+  getNotes,
   removeNote,
+  setNote,
 };
