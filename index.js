@@ -1,13 +1,13 @@
 const express = require("express");
 const chalk = require("chalk");
 const path = require("path");
+const mongoose = require("mongoose");
 const {
   addNote,
   getNotes,
   removeNote,
   setNote,
 } = require("./notes.controller");
-const { title } = require("process");
 
 const port = 3000;
 const app = express();
@@ -28,16 +28,28 @@ app.get("/", async (req, res) => {
     title: "Express App",
     notes: await getNotes(),
     created: false,
+    error: false,
   });
 });
 
 app.post("/", async (req, res) => {
-  await addNote(req.body.title);
-  res.render("index", {
-    title: "Express App",
-    notes: await getNotes(),
-    created: true,
-  });
+  try {
+    await addNote(req.body.title);
+    res.render("index", {
+      title: "Express App",
+      notes: await getNotes(),
+      created: true,
+      error: false,
+    });
+  } catch (error) {
+    console.error(error);
+    res.render("index", {
+      title: "Express App",
+      notes: await getNotes(),
+      created: false,
+      error: true,
+    });
+  }
 });
 
 app.delete("/:id", async (req, res) => {
@@ -46,6 +58,7 @@ app.delete("/:id", async (req, res) => {
     title: "Express App",
     notes: await getNotes(),
     created: false,
+    error: false,
   });
 });
 
@@ -55,9 +68,15 @@ app.put("/:id", async (req, res) => {
     title: "Express App",
     notes: await getNotes(),
     created: false,
+    error: false,
   });
 });
-
-app.listen(port, () => {
-  console.log(chalk.green(`Server has been started on port ${port}...`));
-});
+// mongodb://user:mongopass@localhost:27017/testdb?authSource=admin
+// mongoose.connect("mongodb://user:mongopass@localhost:27017/");
+mongoose
+  .connect("mongodb://user:mongopass@localhost:27017/testdb?authSource=admin")
+  .then(() => {
+    app.listen(port, () => {
+      console.log(chalk.green(`Server has been started on port ${port}...`));
+    });
+  });
