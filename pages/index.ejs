@@ -35,27 +35,53 @@
       <div class="card">
         <ul class="list-group">
           <% for (let i = 0; i < notes.length; i++) { %>
-          <li
-            class="list-group-item d-flex justify-content-between align-items-center"
-          >
-            <span><%= notes[i].title %></span>
+          <li class="list-group-item">
+            <div
+              data-view-item
+              class="d-flex justify-content-between align-items-center"
+            >
+              <span><%= notes[i].title %></span>
 
-            <div>
-              <button
-                class="btn btn-primary"
-                data-type="edit"
-                data-id="<%= notes[i].id %>"
-              >
-                edit
-              </button>
+              <div>
+                <button
+                  class="btn btn-primary"
+                  data-type="edit"
+                  data-id="<%= notes[i].id %>"
+                >
+                  update
+                </button>
 
-              <button
-                class="btn btn-danger"
-                data-type="remove"
-                data-id="<%= notes[i].id %>"
-              >
-                &times;
-              </button>
+                <button
+                  class="btn btn-danger"
+                  data-type="remove"
+                  data-id="<%= notes[i].id %>"
+                >
+                  &times;
+                </button>
+              </div>
+            </div>
+            <div
+              data-update-form
+              class="d-flex d-none justify-content-between align-items-center"
+            >
+              <input type="text" name="update_title" />
+              <div class="">
+                <button
+                  class="btn btn-success"
+                  data-type="save"
+                  data-id="<%= notes[i].id %>"
+                >
+                  save
+                </button>
+
+                <button
+                  class="btn btn-danger"
+                  data-type="cancel"
+                  data-id="<%= notes[i].id %>"
+                >
+                  cancel
+                </button>
+              </div>
             </div>
           </li>
           <% } %>
